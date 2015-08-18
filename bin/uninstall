@@ -42,6 +42,9 @@ unlink_or_skip(){
   fi
 }
 
+# -------------------------------------------
+echo "=> Dotfiles"
+# -------------------------------------------
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
@@ -50,10 +53,26 @@ for file in ${files[@]}; do
 done
 
 # -------------------------------------------
-echo "=> Unset Sublime Configuration"
+echo "=> Sublime Text Configuration"
 # -------------------------------------------
 sublime_versions=(2)
 for sublime_version in ${sublime_versions[@]}; do
   sublime_home="${HOME}/Library/Application Support/Sublime Text ${sublime_version}"
   unlink_or_skip "Preferences.sublime-settings" "${sublime_home}/Packages/Default/Preferences.sublime-settings"
 done
+
+# -------------------------------------
+echo "=> Vundle"
+# -------------------------------------
+vundle_path="${HOME}/.vim/bundle/Vundle.vim"
+if [[ -L "$vundle_path" && -d "$vundle_path" ]]; then
+  rm $vundle_path
+  echo "Unlinked"
+else
+  echo "$vundle_path is neither a symlink nor a directory."
+fi
+
+# -------------------------------------
+echo "=> Vim Plugins"
+# -------------------------------------
+unlink_or_skip bundles.vim ${HOME}/.vim/bundles.vim
