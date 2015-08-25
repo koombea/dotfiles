@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+dir=$PWD
+if [[ ! "$dir/bin/install" -ef "$0" ]]; then
+  echo "Please run 'bin/install' from dotfiles root folder"
+  exit 1
+fi
+# Getting dotfiles list into an array
+files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
+
+# Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
+for file in ${files[@]}; do
+  printf "${file}\t"
+  dotfile_path="${dir}/${file}"
+  path="${HOME}/${file}"
+  # If file exists and it's a symlink
+  if [ -L $path ]; then
+    printf "Skipped. It already exists\n"
+  else
+    # If file exists
+    if [ -f $path ]; then
+      mv $path "${path}.old"
+      printf "(Renaming ${file} to ${file}.old)\t"
+    fi
+    ln -nfs $dotfile_path $path
+    printf "Symlinked to ${path}\n"
+  fi
+done
