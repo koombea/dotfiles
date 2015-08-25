@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# docker-machine
+dm(){
+  case $1 in
+  create-local)
+    docker-machine create --driver virtualbox $2
+    dm set $2
+    dm nfs $2
+    ;;
+  set)
+    eval "$(docker-machine env $2)"
+    ;;
+  nfs)
+    set-nfs $2
+    ;;
+  *)
+    docker-machine $@
+    ;;
+  esac
+}
+
+set-nfs(){
+  echo "=> Getting host IP address"
+  OSX_IP=$(ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'|grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*'|grep -Eo '([0-9]*\.){3}[0-9]*')
+  echo "=> Setting mapping on /etc/exports"
+  if ! grep -q $OSX_IP /etc/exports; then
+    sudo sh -c "echo \"/Users ${OSX_IP} -alldirs -mapall=501:20\" >> /etc/exports"
+  fi
+  echo "=> Setting nfs config"
+  if ! grep -q "nfs.server.mount.require_resv_port = 0" /etc/nfs.conf; then
+    sudo sh -c 'echo "nfs.server.mount.require_resv_port = 0" >> /etc/nfs.conf'
+  fi
+  echo "=> Restarting nsf"
+  sudo nfsd restart
+  # On docker machine
+  echo "=> Setting nfs in machine"
+  bootfile=/var/lib/boot2docker/bootlocal.sh
+  docker-machine ssh $1 "if [ -f ${bootfile} ] ; then sudo rm /var/lib/boot2docker/bootlocal.sh ; fi"
+  docker-machine ssh $1 "sudo sh -c 'cat <<EOF > /var/lib/boot2docker/bootlocal.sh
+  sudo umount /Users
+  sudo /usr/local/etc/init.d/nfs-client start
+  sudo mount -t nfs -o noacl,async,noatime,soft,nolock,vers=3,udp,proto=udp,rsize=8192,wsize=8192,namlen=255,timeo=10,retrans=3,nfsvers=3,actimeo=2 $OSX_IP:/Users /Users
+  EOF' && sudo sh -c 'chmod 755 /var/lib/boot2docker/bootlocal.sh'"
+  echo "=> Restarting machine"
+  docker-machine restart $1
+}
+
+# docker-compose
+dcp(){
+  case $1 in
+  bundle)
+    docker-compose run --rm $2 bundle
+    ;;
+  rspec)
+    docker-compose run --rm $2 bundle exec rspec
+    ;;
+  dbmigrate)
+    docker-compose run --rm $2 bundle exec rake db:migrate
+    ;;
+  dbsetup)
+    docker-compose run --rm $2 bundle exec rake db:setup
+    ;;
+  dbseed)
+    docker-compose run --rm $2 bundle exec rake db:seed
+    ;;
+  console)
+    docker-compose run --rm $2 bundle exec rails console
+    ;;
+  runb)
+    shift
+    machine=$1
+    shift
+    docker-compose run --rm $machine bundle exec $@
+    ;;
+  *)
+    docker-compose $@
+    ;;
+  esac
+}
