@@ -1,0 +1,32 @@
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+	cp = cherry-pick
+	cob = checkout -b
+	amend = commit --amend -CHEAD
+	hist = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+	tree = log --graph --oneline --decorate --color --all
+	ri = "!f(){ git rebase --interactive HEAD~${1}; };f"
+	rmbranch = "!f(){ git branch -d ${1} && git push origin --delete ${1}; };f"
+	la = "!git config -l | grep alias | cut -c 7-"
+	wip = !git add -A && git commit -m 'WIP'
+[branch]
+	autosetuprebase = always
+[color]
+	ui = auto
+[core]
+	editor = vim
+[help]
+	autocorrect = 10
+[include]
+	path = ~/.gitconfig.local
+[interactive]
+	singlekey = true
+[merge]
+	summary = true
+[push]
+	default = current
+[rebase]
+	autosquash = true
