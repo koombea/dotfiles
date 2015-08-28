@@ -46,6 +46,14 @@ Cd into dotfiles home directory and run this script:
 $ bin/uninstall
 ```
 
-## Contribute
+## Contributing
 
-If you are interested in contributing fixing a bug or suggesting something new, do not hesitate in forking the project and submitting a pull request.
+1. Fork it ( https://github.com/koombea/dotfiles/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
+
+## License
+
+Copyright 2015 Koombea. http://koombea.com
