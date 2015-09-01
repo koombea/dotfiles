@@ -28,3 +28,37 @@ for file in ${files[@]}; do
     printf "Symlinked to ${path}\n"
   fi
 done
+
+# INSTALL SUBLIME PACKAGES
+# 1.) Search for the installed sublime version
+# 2.) Download and copy the file "Package Control.sublime-package" to the “/Installed Packages" folder within Sublime dir.
+# 3.) To batch install other packages, copy the file “Package Control.sublime-settings” into the "Packages/User/“ folder.
+# 4.) Also, copy the file "Preferences.sublime-settings” into the "Packages/User/“ folder.
+
+download_file(){
+  curl -sS https://packagecontrol.io/Package%22Control.sublime-package > "Package Control.sublime-package"
+  echo "Downloading Package Control.sublime-package"
+}
+
+symlink_file(){
+  ln -nfs "$1" "$2"
+  echo "Symlinked to ${2##*/}"
+}
+# USER PREFERENCES INSTALLATION SUBLIME 2
+USER_SETTINGS_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
+PACKAGE_DIR="$HOME/Library/Application Support/Sublime Text 2/Installed Packages"
+SUBLIME_2_DIR="$HOME/Library/Application Support/Sublime Text 2"
+if [ -d "$SUBLIME_2_DIR" ]; then
+  USER_PREFERENCE_FILE="${USER_SETTINGS_DIR}/Preferences.sublime-settings"
+  USER_PREFERENCE_DOTFILE_PATH="${PWD}/Preferences.sublime-settings"
+  symlink_file "$USER_PREFERENCE_DOTFILE_PATH" "$USER_PREFERENCE_FILE"
+
+  download_file
+  PACKAGE_CONTROL_PATH="${PACKAGE_DIR}/Package Control.sublime-package"
+  PACKAGE_CONTROL_DOTFILE_PATH="${PWD}/Package Control.sublime-package"
+  symlink_file "$PACKAGE_CONTROL_DOTFILE_PATH" "$PACKAGE_CONTROL_PATH"
+
+  CUSTOM_PACKAGES_PATH="${USER_SETTINGS_DIR}/Package Control.sublime-settings"
+  CUSTOM_PACKAGES_DOTFILE_PATH="${PWD}/Package Control.sublime-settings"
+  symlink_file "$CUSTOM_PACKAGES_DOTFILE_PATH" "$CUSTOM_PACKAGES_PATH"
+fi
