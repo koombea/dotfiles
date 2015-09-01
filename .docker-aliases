@@ -5,8 +5,8 @@ dm(){
   case $1 in
   create-local)
     docker-machine create --driver virtualbox $2
-    dm set $2
     dm nfs $2
+    dm set $2
     ;;
   set)
     eval "$(docker-machine env $2)"
