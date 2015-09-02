@@ -34,32 +34,63 @@ done
 # 2.) Download and copy the file "Package Control.sublime-package" to the “/Installed Packages" folder within Sublime dir.
 # 3.) To batch install other packages, copy the file “Package Control.sublime-settings” into the "Packages/User/“ folder.
 # 4.) Also, copy the file "Preferences.sublime-settings” into the "Packages/User/“ folder.
-
 download_file(){
-  curl -sS https://packagecontrol.io/Package%22Control.sublime-package > "Package Control.sublime-package"
-  echo "Downloading Package Control.sublime-package"
-}
-
-symlink_file(){
-  ln -nfs "$1" "$2"
-  echo "Symlinked to ${2##*/}"
-}
-# USER PREFERENCES INSTALLATION SUBLIME 2
-USER_SETTINGS_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
-PACKAGE_DIR="$HOME/Library/Application Support/Sublime Text 2/Installed Packages"
-SUBLIME_2_DIR="$HOME/Library/Application Support/Sublime Text 2"
-SUBLIME_2_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
-
-#To stop space as element delimiter.
-IFS=""
-regex='sublime-package$'
-download_file
-for filename in ${SUBLIME_2_FILES[*]}; do
-  if [[ $filename =~ $regex ]]; then
-    DESTINY="${PACKAGE_DIR}/${filename}"
+  PACKAGE_CONTROL="${PWD}/Package Control.sublime-package"
+  if [ -f $PACKAGE_CONTROL ]; then
+    echo "Package Control.sublime-package already exists in the dotfile path."
   else
-    DESTINY="${USER_SETTINGS_DIR}/${filename}"
+    curl -sS https://packagecontrol.io/Package%22Control.sublime-package > "Package Control.sublime-package"
+    echo "Downloading Package Control.sublime-package"
   fi
-  ORIGIN="${PWD}/${filename}"
-  symlink_file "$ORIGIN" "$DESTINY"
-done
+}
+
+echo_message(){
+  case $1 in
+    "skip")
+      echo "Skipped ${2##*/}. It already exists"
+      ;;
+    "rename")
+      echo "Renaming ${2##*/} to ${2##*/}.old"
+      ;;
+    "symlink")
+      echo "Symlinked to ${2##*/}"
+  esac
+}
+
+skip_or_symlink_file(){
+  if [ -L $2 ]; then
+    echo_message "skip" "$2"
+  else
+    if [ -f $2 ]; then
+      mv $2 "${2}.old"
+      echo_message "rename" "$2"
+    fi
+    ln -nfs "$1" "$2"
+    echo_message "symlink" "$2"
+  fi
+}
+
+sublime_2_support(){
+  # USER PREFERENCES INSTALLATION SUBLIME 2
+  USER_SETTINGS_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
+  PACKAGE_DIR="$HOME/Library/Application Support/Sublime Text 2/Installed Packages"
+  SUBLIME_2_DIR="$HOME/Library/Application Support/Sublime Text 2"
+  SUBLIME_2_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
+
+  #To stop space as element delimiter.
+  IFS=""
+  regex='sublime-package$'
+  download_file
+  for filename in ${SUBLIME_2_FILES[*]}; do
+    if [[ $filename =~ $regex ]]; then
+      DESTINY="${PACKAGE_DIR}/${filename}"
+    else
+      DESTINY="${USER_SETTINGS_DIR}/${filename}"
+    fi
+    ORIGIN="${PWD}/${filename}"
+
+    skip_or_symlink_file "$ORIGIN" "$DESTINY"
+  done
+}
+
+sublime_2_support
