@@ -48,17 +48,18 @@ symlink_file(){
 USER_SETTINGS_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
 PACKAGE_DIR="$HOME/Library/Application Support/Sublime Text 2/Installed Packages"
 SUBLIME_2_DIR="$HOME/Library/Application Support/Sublime Text 2"
-if [ -d "$SUBLIME_2_DIR" ]; then
-  USER_PREFERENCE_FILE="${USER_SETTINGS_DIR}/Preferences.sublime-settings"
-  USER_PREFERENCE_DOTFILE_PATH="${PWD}/Preferences.sublime-settings"
-  symlink_file "$USER_PREFERENCE_DOTFILE_PATH" "$USER_PREFERENCE_FILE"
+SUBLIME_2_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
 
-  download_file
-  PACKAGE_CONTROL_PATH="${PACKAGE_DIR}/Package Control.sublime-package"
-  PACKAGE_CONTROL_DOTFILE_PATH="${PWD}/Package Control.sublime-package"
-  symlink_file "$PACKAGE_CONTROL_DOTFILE_PATH" "$PACKAGE_CONTROL_PATH"
-
-  CUSTOM_PACKAGES_PATH="${USER_SETTINGS_DIR}/Package Control.sublime-settings"
-  CUSTOM_PACKAGES_DOTFILE_PATH="${PWD}/Package Control.sublime-settings"
-  symlink_file "$CUSTOM_PACKAGES_DOTFILE_PATH" "$CUSTOM_PACKAGES_PATH"
-fi
+#To stop space as element delimiter.
+IFS=""
+regex='sublime-package$'
+download_file
+for filename in ${SUBLIME_2_FILES[*]}; do
+  if [[ $filename =~ $regex ]]; then
+    DESTINY="${PACKAGE_DIR}/${filename}"
+  else
+    DESTINY="${USER_SETTINGS_DIR}/${filename}"
+  fi
+  ORIGIN="${PWD}/${filename}"
+  symlink_file "$ORIGIN" "$DESTINY"
+done
