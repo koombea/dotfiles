@@ -36,7 +36,7 @@ done
 # 4.) Also, copy the file "Preferences.sublime-settings” into the "Packages/User/“ folder.
 download_file(){
   PACKAGE_CONTROL="${PWD}/Package Control.sublime-package"
-  if [ -f $PACKAGE_CONTROL ]; then
+  if [[ -f $PACKAGE_CONTROL ]]; then
     echo "Package Control.sublime-package already exists in the dotfile path."
   else
     curl -sS https://packagecontrol.io/Package%22Control.sublime-package > "Package Control.sublime-package"
@@ -70,27 +70,38 @@ skip_or_symlink_file(){
   fi
 }
 
-sublime_2_support(){
-  # USER PREFERENCES INSTALLATION SUBLIME 2
-  USER_SETTINGS_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
-  PACKAGE_DIR="$HOME/Library/Application Support/Sublime Text 2/Installed Packages"
-  SUBLIME_2_DIR="$HOME/Library/Application Support/Sublime Text 2"
-  SUBLIME_2_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
+sublime_support(){
+  download_file
+  SUBLIME_VERSIONS=("Sublime Text 2" "Sublime Text 3")
 
+  # USER PREFERENCES INSTALLATION SUBLIME
   #To stop space as element delimiter.
   IFS=""
-  regex='sublime-package$'
-  download_file
-  for filename in ${SUBLIME_2_FILES[*]}; do
-    if [[ $filename =~ $regex ]]; then
-      DESTINY="${PACKAGE_DIR}/${filename}"
-    else
-      DESTINY="${USER_SETTINGS_DIR}/${filename}"
-    fi
-    ORIGIN="${PWD}/${filename}"
+  for sublime_version in ${SUBLIME_VERSIONS[*]}; do
+    SUBLIME_DIR="$HOME/Library/Application Support/${sublime_version}"
+    if [ -d "$SUBLIME_DIR" ]; then
+      USER_SETTINGS_DIR="${SUBLIME_DIR}/Packages/User"
+      PACKAGE_DIR="${SUBLIME_DIR}/Installed Packages"
+      SUBLIME_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
 
-    skip_or_symlink_file "$ORIGIN" "$DESTINY"
+      echo "Settings for ${sublime_version}"
+
+      IFS=""
+      regex='sublime-package$'
+      for filename in ${SUBLIME_FILES[*]}; do
+        if [[ $filename =~ $regex ]]; then
+          DESTINY="${PACKAGE_DIR}/${filename}"
+        else
+          DESTINY="${USER_SETTINGS_DIR}/${filename}"
+        fi
+        ORIGIN="${PWD}/${filename}"
+
+        skip_or_symlink_file "$ORIGIN" "$DESTINY"
+      done
+      printf "\n"
+    fi
   done
+
 }
 
-sublime_2_support
+sublime_support
