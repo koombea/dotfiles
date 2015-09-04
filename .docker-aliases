@@ -4,7 +4,7 @@
 dm(){
   case $1 in
   create-local)
-    docker-machine create --driver virtualbox $2
+    docker-machine create --driver virtualbox --virtualbox-memory 2048 --virtualbox-cpu-count 2 $2
     dm nfs $2
     dm set $2
     ;;
