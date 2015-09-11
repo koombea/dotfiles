@@ -3,105 +3,61 @@
 set -e
 
 dir=$PWD
+
 if [[ ! "$dir/bin/install" -ef "$0" ]]; then
   echo "Please run 'bin/install' from dotfiles root folder"
   exit 1
 fi
+
+# Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
+symlink_file(){
+  local file=$1
+  local link_path=$2
+  local dotfile_path="${dir}/${file}"
+  # If file exists and it's a symlink
+  if [ -L "${link_path}" ]; then
+    echo "Skipped. It already exists"
+  else
+    # If file exists
+    if [ -f "${link_path}" ]; then
+      mv "${link_path}" "${link_path}.old"
+      printf "(Renaming ${file} to ${file}.old)\t"
+    fi
+    ln -nfs "${dotfile_path}" "${link_path}"
+    echo "Symlinked to ${link_path}"
+  fi
+}
+
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
-# Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
 for file in ${files[@]}; do
   printf "${file}\t"
-  dotfile_path="${dir}/${file}"
-  path="${HOME}/${file}"
-  # If file exists and it's a symlink
-  if [ -L $path ]; then
-    printf "Skipped. It already exists\n"
-  else
-    # If file exists
-    if [ -f $path ]; then
-      mv $path "${path}.old"
-      printf "(Renaming ${file} to ${file}.old)\t"
-    fi
-    ln -nfs $dotfile_path $path
-    printf "Symlinked to ${path}\n"
-  fi
+  symlink_file $file "${HOME}/${file}"
 done
 
-# INSTALL SUBLIME PACKAGES
-# 1.) Search for the installed sublime version
-# 2.) Download and copy the file "Package Control.sublime-package" to the “/Installed Packages" folder within Sublime dir.
-# 3.) To batch install other packages, copy the file “Package Control.sublime-settings” into the "Packages/User/“ folder.
-# 4.) Also, copy the file "Preferences.sublime-settings” into the "Packages/User/“ folder.
-download_file(){
-  PACKAGE_CONTROL="${PWD}/Package Control.sublime-package"
-  if [[ -f $PACKAGE_CONTROL ]]; then
-    echo "Package Control.sublime-package already exists in the dotfile path."
-  else
-    curl -sS https://packagecontrol.io/Package%22Control.sublime-package > "Package Control.sublime-package"
-    echo "Downloading Package Control.sublime-package"
+# -------------------------------------
+echo "=>Set Sublime Configuration"
+# -------------------------------------
+
+sublime_versions=(2)
+preferences_file="Preferences.sublime-settings"
+for sublime_version in ${sublime_versions[@]}; do
+  sublime_home="${HOME}/Library/Application Support/Sublime Text ${sublime_version}"
+  sublime_default_dir="${sublime_home}/Packages/Default"
+  # Symlink Sublime preferences
+  if [ -d "${sublime_home}" ]; then
+    printf "${preferences_file}\t"
+    symlink_file $preferences_file "${sublime_default_dir}/${preferences_file}"
   fi
-}
-
-echo_message(){
-  case $1 in
-    "skip")
-      echo "Skipped ${2##*/}. It already exists"
-      ;;
-    "rename")
-      echo "Renaming ${2##*/} to ${2##*/}.old"
-      ;;
-    "symlink")
-      echo "Symlinked to ${2##*/}"
-  esac
-}
-
-skip_or_symlink_file(){
-  if [ -L $2 ]; then
-    echo_message "skip" "$2"
+  # Symlink Package Control
+  package_control_dir="${sublime_home}/Packages/Package Control"
+  printf "Sublime Package Control....."
+  if [ -d "${package_control_dir}" ]; then
+    echo "Already installed"
   else
-    if [ -f $2 ]; then
-      mv $2 "${2}.old"
-      echo_message "rename" "$2"
-    fi
-    ln -nfs "$1" "$2"
-    echo_message "symlink" "$2"
+    mkdir "${package_control_dir}"
+    curl -sS https://packagecontrol.io/Package%20Control.sublime-package | tar -xf - -C "${package_control_dir}"
+    echo "Installed"
   fi
-}
-
-sublime_support(){
-  download_file
-  SUBLIME_VERSIONS=("Sublime Text 2" "Sublime Text 3")
-
-  # USER PREFERENCES INSTALLATION SUBLIME
-  #To stop space as element delimiter.
-  IFS=""
-  for sublime_version in ${SUBLIME_VERSIONS[*]}; do
-    SUBLIME_DIR="$HOME/Library/Application Support/${sublime_version}"
-    if [ -d "$SUBLIME_DIR" ]; then
-      USER_SETTINGS_DIR="${SUBLIME_DIR}/Packages/User"
-      PACKAGE_DIR="${SUBLIME_DIR}/Installed Packages"
-      SUBLIME_FILES=("Preferences.sublime-settings" "Package Control.sublime-package" "Package Control.sublime-settings")
-
-      echo "Settings for ${sublime_version}"
-
-      IFS=""
-      regex='sublime-package$'
-      for filename in ${SUBLIME_FILES[*]}; do
-        if [[ $filename =~ $regex ]]; then
-          DESTINY="${PACKAGE_DIR}/${filename}"
-        else
-          DESTINY="${USER_SETTINGS_DIR}/${filename}"
-        fi
-        ORIGIN="${PWD}/${filename}"
-
-        skip_or_symlink_file "$ORIGIN" "$DESTINY"
-      done
-      printf "\n"
-    fi
-  done
-
-}
-
-sublime_support
+done
