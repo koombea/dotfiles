@@ -1,0 +1,20 @@
+{
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Git",
+		"GitHubinator",
+		"Haml",
+		"Highlight",
+		"HTML Snippets",
+		"JS Snippets",
+		"JSON Reindent",
+		"Package Control",
+		"Sass",
+		"SASS Snippets",
+		"SideBarEnhancements",
+		"TrailingSpaces"
+	]
+}
