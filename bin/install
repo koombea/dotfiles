@@ -10,7 +10,7 @@ if [[ ! "$dir/bin/install" -ef "$0" ]]; then
 fi
 
 # Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
-skip_or_symlink_file(){
+symlink_or_skip(){
   local file=$1
   local link_path=$2
   local dotfile_path="${dir}/${file}"
@@ -33,7 +33,7 @@ files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
 for file in ${files[@]}; do
   printf "${file}\t"
-  skip_or_symlink_file $file "${HOME}/${file}"
+  symlink_or_skip $file "${HOME}/${file}"
 done
 
 # -------------------------------------
@@ -48,7 +48,7 @@ for sublime_version in ${sublime_versions[@]}; do
   # Symlink Sublime preferences
   if [ -d "${sublime_home}" ]; then
     printf "${preferences_file}\t"
-    skip_or_symlink_file $preferences_file "${sublime_default_dir}/${preferences_file}"
+    symlink_or_skip $preferences_file "${sublime_default_dir}/${preferences_file}"
   fi
   # Symlink Package Control
   package_control_dir="${sublime_home}/Packages/Package Control"

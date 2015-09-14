@@ -31,7 +31,7 @@ set-nfs(){
   if ! grep -q "nfs.server.mount.require_resv_port = 0" /etc/nfs.conf; then
     sudo sh -c 'echo "nfs.server.mount.require_resv_port = 0" >> /etc/nfs.conf'
   fi
-  echo "=> Restarting nsf"
+  echo "=> Restarting nfs"
   sudo nfsd restart
   # On docker machine
   echo "=> Setting nfs in machine"

@@ -17,7 +17,7 @@ restore_file(){
   fi
 }
 
-skip_or_unlink_file(){
+unlink_or_skip(){
   local file=$1
   local link_path=$2
   local dotfile_path="${dir}/${file}"
@@ -46,7 +46,7 @@ skip_or_unlink_file(){
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
 for file in ${files[@]}; do
-  skip_or_unlink_file "${file}" "${HOME}/${file}"
+  unlink_or_skip "${file}" "${HOME}/${file}"
 done
 
 # -------------------------------------------
@@ -55,5 +55,5 @@ echo "=> Unset Sublime Configuration"
 sublime_versions=(2)
 for sublime_version in ${sublime_versions[@]}; do
   sublime_home="${HOME}/Library/Application Support/Sublime Text ${sublime_version}"
-  skip_or_unlink_file "Preferences.sublime-settings" "${sublime_home}/Packages/Default/Preferences.sublime-settings"
+  unlink_or_skip "Preferences.sublime-settings" "${sublime_home}/Packages/Default/Preferences.sublime-settings"
 done
