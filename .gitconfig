@@ -20,8 +20,6 @@
 	editor = vim
 [help]
 	autocorrect = 10
-[include]
-	path = ~/.gitconfig.local
 [interactive]
 	singlekey = true
 [merge]
@@ -30,3 +28,5 @@
 	default = current
 [rebase]
 	autosquash = true
+[include]
+	path = ~/.gitconfig.local
