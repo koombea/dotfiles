@@ -61,3 +61,15 @@ for sublime_version in ${sublime_versions[@]}; do
     echo "Installed"
   fi
 done
+
+#Checking the presence of .local files in HOME directory and generate them if don't exist
+localfiles=".tmux.conf.local .vimrc.local"
+for file in $localfiles; do
+  foundfile=($(find $HOME -maxdepth 1 -name "$file" -type f) )
+  # Return true if the variable is unset
+  if [ -z "$foundfile" ]; then
+    touch "${HOME}/${file}"
+    echo "Generating $file"
+  fi
+done
+
