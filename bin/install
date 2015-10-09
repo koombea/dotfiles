@@ -43,7 +43,7 @@ echo "=> Set Sublime Configuration"
 sublime_versions=(2)
 preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
-  sublime_home="${HOME}/Library/Application Support/Sublime Text ${sublime_version}"
+  sublime_home="${HOME}/Library/Application\ Support/Sublime\ Text\ ${sublime_version}"
   sublime_default_dir="${sublime_home}/Packages/Default"
   # Symlink Sublime preferences
   if [ -d "${sublime_home}" ]; then
@@ -56,7 +56,7 @@ for sublime_version in ${sublime_versions[@]}; do
   if [ -d "${package_control_dir}" ]; then
     echo "Already installed"
   else
-    mkdir "${package_control_dir}"
+    mkdir -p "${package_control_dir}"
     curl -sS https://packagecontrol.io/Package%20Control.sublime-package | tar -xf - -C "${package_control_dir}"
     echo "Installed"
   fi
