@@ -22,6 +22,9 @@ set hidden
 set guifont=Monaco:h16
 set guioptions-=T guioptions-=e guioptions-=L guioptions-=r
 
+" Display line numbers
+set number
+
 " Use bash when executing shell commands
 set shell=bash
 
