@@ -23,11 +23,14 @@ symlink_or_skip(){
       mv "${link_path}" "${link_path}.old"
       printf "(Renaming ${file} to ${file}.old)\t"
     fi
-    ln -nfs "${dotfile_path}" "${link_path}"
-    echo "Symlinked to ${link_path}"
+    ln -fs "${dotfile_path}" "${link_path}"
+    echo "Symlinked ${file} to ${link_path}"
   fi
 }
 
+# -------------------------------------
+echo "=> Dotfiles"
+# -------------------------------------
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
@@ -37,9 +40,8 @@ for file in ${files[@]}; do
 done
 
 # -------------------------------------
-echo "=> Set Sublime Configuration"
+echo "=> Sublime Text Configuration"
 # -------------------------------------
-
 sublime_versions=(2)
 preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
@@ -64,3 +66,14 @@ for sublime_version in ${sublime_versions[@]}; do
     echo "Sublime Text ${sublime_version} is not installed"
   fi
 done
+
+# -------------------------------------
+echo "=> Vundle"
+# -------------------------------------
+symlink_or_skip Vundle.vim ${HOME}/.vim/bundle/Vundle.vim
+
+# -------------------------------------
+echo "=> Vim plugins"
+# -------------------------------------
+symlink_or_skip bundles.vim ${HOME}/.vim/bundles.vim
+vim +PluginInstall +qall
