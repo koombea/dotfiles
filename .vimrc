@@ -83,7 +83,7 @@ map <Leader>fnt :NERDTreeFind<CR>
 " Set default indentation to 2 spaces
 set softtabstop=2 shiftwidth=2 expandtab
 
-colorscheme Tomorrow-Night-Eighties
+colorscheme default
 
 " vp doesn't replace paste buffer
 function! RestoreRegister()
