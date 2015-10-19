@@ -45,19 +45,22 @@ preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
   sublime_home="${HOME}/Library/Application\ Support/Sublime\ Text\ ${sublime_version}"
   sublime_default_dir="${sublime_home}/Packages/Default"
-  # Symlink Sublime preferences
   if [ -d "${sublime_home}" ]; then
+    # Symlink Sublime preferences
     printf "${preferences_file}\t"
     symlink_or_skip $preferences_file "${sublime_default_dir}/${preferences_file}"
-  fi
-  # Symlink Package Control
-  package_control_dir="${sublime_home}/Packages/Package Control"
-  printf "Sublime Package Control....."
-  if [ -d "${package_control_dir}" ]; then
-    echo "Already installed"
+
+    # Symlink Package Control
+    package_control_dir="${sublime_home}/Packages/Package Control"
+    printf "Sublime Package Control....."
+    if [ -d "${package_control_dir}" ]; then
+      echo "Already installed"
+    else
+      mkdir -p "${package_control_dir}"
+      curl -sS https://packagecontrol.io/Package%20Control.sublime-package | tar -xf - -C "${package_control_dir}"
+      echo "Installed"
+    fi
   else
-    mkdir -p "${package_control_dir}"
-    curl -sS https://packagecontrol.io/Package%20Control.sublime-package | tar -xf - -C "${package_control_dir}"
-    echo "Installed"
+    echo "Sublime Text ${sublime_version} is not installed"
   fi
 done
