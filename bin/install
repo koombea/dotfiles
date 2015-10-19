@@ -70,6 +70,7 @@ done
 # -------------------------------------
 echo "=> Vundle"
 # -------------------------------------
+git submodule init && git submodule update
 symlink_or_skip Vundle.vim ${HOME}/.vim/bundle/Vundle.vim
 
 # -------------------------------------
