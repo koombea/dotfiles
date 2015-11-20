@@ -13,6 +13,7 @@ fi
 symlink_or_skip(){
   local file=$1
   local link_path=$2
+  local link_dir_path=$(dirname $link_path)
   local dotfile_path="${dir}/${file}"
   # If file exists and it's a symlink
   if [ -L "${link_path}" ]; then
@@ -23,6 +24,7 @@ symlink_or_skip(){
       mv "${link_path}" "${link_path}.old"
       printf "(Renaming ${file} to ${file}.old)\t"
     fi
+    mkdir -p $link_dir_path
     ln -fs "${dotfile_path}" "${link_path}"
     echo "Symlinked ${file} to ${link_path}"
   fi
