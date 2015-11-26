@@ -69,6 +69,8 @@ for sublime_version in ${sublime_versions[@]}; do
   fi
 done
 
+symlink_or_skip .vim/colors/monokai.vim ${HOME}/.vim/colors/monokai.vim
+
 # -------------------------------------
 echo "=> Vundle"
 # -------------------------------------
