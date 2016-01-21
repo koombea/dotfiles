@@ -19,7 +19,7 @@ fancy_echo() {
 symlink_or_skip(){
   local file=$1
   local link_path=$2
-  local link_dir_path=$(dirname $link_path)
+  local link_dir_path=$(dirname "${link_path}")
   local dotfile_path="${dir}/${file}"
   # If file exists and it's a symlink
   if [ -L "${link_path}" ]; then
@@ -53,7 +53,7 @@ fancy_echo "Sublime Text Configuration"
 sublime_versions=(2)
 preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
-  sublime_home="${HOME}/Library/Application\ Support/Sublime\ Text\ ${sublime_version}"
+  sublime_home="${HOME}/Library/Application Support/Sublime Text ${sublime_version}"
   sublime_default_dir="${sublime_home}/Packages/Default"
   if [ -d "${sublime_home}" ]; then
     # Symlink Sublime preferences
