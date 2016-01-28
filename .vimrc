@@ -7,6 +7,9 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 source ~/.vim/bundles.vim
+if filereadable(expand('~/.vim/bundles.vim.local'))
+  source ~/.vim/bundles.vim.local
+endif
 call vundle#end()
 
 " Allow set indent per filetype
