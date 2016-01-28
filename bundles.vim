@@ -114,10 +114,6 @@ Plugin 'vim-scripts/IndexedSearch'
 " Displays 'Nth match out of M' at every search
 " https://github.com/vim-scripts/IndexedSearch
 
-Plugin 'goldfeld/vim-seek'
-" Allows you to navigate long-lines easily
-" More info: https://github.com/goldfeld/vim-seek
-
 Plugin 'kana/vim-textobj-user'
 " Allows you to create your own text objects
 " More info: https://github.com/kana/vim-textobj-user/wiki, https://github.com/nelstrom/vim-textobj-rubyblock
