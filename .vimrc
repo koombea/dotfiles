@@ -97,7 +97,7 @@ map <Leader>fnt :NERDTreeFind<CR>
 " Set default indentation to 2 spaces
 set softtabstop=2 shiftwidth=2 expandtab
 
-colorscheme default
+colorscheme monokai
 
 " vp doesn't replace paste buffer
 function! RestoreRegister()
