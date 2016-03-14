@@ -25,7 +25,7 @@
 [merge]
 	summary = true
 [push]
-	default = current
+	default = simple
 [rebase]
 	autosquash = true
 [include]
