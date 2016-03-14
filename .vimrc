@@ -126,6 +126,9 @@ set nobackup
 " Disable swapfile
 set noswapfile
 
+" The encoding displayed.
+set encoding=utf-8
+
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
