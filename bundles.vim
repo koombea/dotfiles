@@ -145,3 +145,7 @@ Plugin 'bling/vim-airline'
 Plugin 'ekalinin/Dockerfile.vim'
 " Vim syntax file for Docker's Dockerfile and snippets for snipMate.
 " More info: https://github.com/ekalinin/Dockerfile.vim
+"
+Plugin 'tpope/vim-rails'
+" Plugin for working with Ruby on Rails applications
+" More info: https://github.com/tpope/vim-rails
