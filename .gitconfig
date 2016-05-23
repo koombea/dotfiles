@@ -12,8 +12,6 @@
 	rmbranch = "!f(){ git branch -d ${1} && git push origin --delete ${1}; };f"
 	la = "!git config -l | grep alias | cut -c 7-"
 	wip = !git add -A && git commit -m 'WIP'
-[branch]
-	autosetuprebase = always
 [color]
 	ui = auto
 [core]
@@ -26,6 +24,8 @@
 	summary = true
 [push]
 	default = simple
+[pull]
+	rebase = true
 [rebase]
 	autosquash = true
 [include]
