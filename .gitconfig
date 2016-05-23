@@ -18,6 +18,7 @@
 	ui = auto
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
 [help]
 	autocorrect = 10
 [interactive]
