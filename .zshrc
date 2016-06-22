@@ -7,6 +7,7 @@ ZSH_THEME="gallois"
 # Note: zsh-syntax-highlighting needs to be the last element of the array
 plugins=(git rails autojump history-substring-search zsh-syntax-highlighting)
 
+source $HOME/.aliases
 source $ZSH/oh-my-zsh.sh
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
