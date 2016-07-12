@@ -15,3 +15,5 @@ export EDITOR='vim'
 
 zrcl="$HOME/.zshrc.local"
 [[ ! -a $zrcl ]] || source $zrcl
+
+alias reload=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
