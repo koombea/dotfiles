@@ -51,5 +51,8 @@ alias dcg='dcp | grep'
 # Ruby/Rails
 alias be='bundle exec'
 
+#ZSH
+alias reload=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+
 # Other
 alias aliases="cat $HOME/.aliases"
