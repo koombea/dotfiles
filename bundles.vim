@@ -126,9 +126,9 @@ Plugin 'altercation/vim-colors-solarized'
 " colorscheme for the vim
 " More info: https://github.com/altercation/vim-colors-solarized
 
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 " Fuzzy file, buffer, mru, tag, etc finder
-" More info: https://github.com/kien/ctrlp.vim
+" More info: https://github.com/ctrlpvim/ctrlp.vim
 
 Plugin 'scrooloose/nerdtree'
 " A tree explorer plugin for vim
