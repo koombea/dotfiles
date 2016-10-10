@@ -151,5 +151,5 @@ Plugin 'tpope/vim-rails'
 " More info: https://github.com/tpope/vim-rails
 
 Plugin 'isRuslan/vim-es6'
-" Write JavaScript ES6 easily with vim "
-" https://github.com/isRuslan/vim-es6 "
+" Write JavaScript ES6 easily with vim
+" https://github.com/isRuslan/vim-es6
