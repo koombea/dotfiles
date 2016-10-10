@@ -153,3 +153,7 @@ Plugin 'tpope/vim-rails'
 Plugin 'isRuslan/vim-es6'
 " Write JavaScript ES6 easily with vim
 " https://github.com/isRuslan/vim-es6
+
+Plugin 'kylef/apiblueprint.vim'
+" Syntax highlighting and linting for API Blueprint
+" https://github.com/kylef/apiblueprint.vim
