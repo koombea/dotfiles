@@ -157,3 +157,7 @@ Plugin 'isRuslan/vim-es6'
 Plugin 'kylef/apiblueprint.vim'
 " Syntax highlighting and linting for API Blueprint
 " https://github.com/kylef/apiblueprint.vim
+
+Plugin 'bronson/vim-trailing-whitespace'
+" Highlights trailing whitespace in red and provides :FixWhitespace to fix it.
+" https://github.com/bronson/vim-trailing-whitespace
