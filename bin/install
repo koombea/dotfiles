@@ -99,9 +99,19 @@ if brew ls -1 | grep -q "autojump"; then
 else
   brew install autojump
 fi
-echo "Installing zsh-syntax-highlighting ..."
+
 ZSH=~/.oh-my-zsh
 zsh_plugins_path=$ZSH/custom/plugins
+
+echo "Installing zsh-autosuggestions ..."
+autosuggestions_path=$zsh_plugins_path/zsh-autosuggestions
+if [ -d $autosuggestions_path ]; then
+  echo "zsh-autosuggestions already installed."
+else
+  git clone git://github.com/zsh-users/zsh-autosuggestions $autosuggestions_path
+fi
+
+echo "Installing zsh-syntax-highlighting ..."
 syntax_highlighting_path=$zsh_plugins_path/zsh-syntax-highlighting
 if [ -d $syntax_highlighting_path ]; then
   echo "zsh-syntax-highlighting already installed."
