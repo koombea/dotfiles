@@ -62,6 +62,11 @@ for sublime_version in ${sublime_versions[@]}; do
 done
 
 # -------------------------------------
+echo "=> Vim Monokai Theme"
+# -------------------------------------
+unlink_or_skip .vim/colors/monokai.vim "${HOME}/.vim/colors/monokai.vim"
+
+# -------------------------------------
 echo "=> Vundle"
 # -------------------------------------
 vundle_path="${HOME}/.vim/bundle/Vundle.vim"
