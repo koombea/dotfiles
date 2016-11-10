@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="gallois"
 
 # Note: zsh-syntax-highlighting needs to be the last element of the array
-plugins=(git ruby rails autojump history-substring-search zsh-syntax-highlighting)
+plugins=(git ruby rails autojump history-substring-search zsh-autosuggestions zsh-syntax-highlighting)
 
 source $HOME/.aliases
 source $ZSH/oh-my-zsh.sh
