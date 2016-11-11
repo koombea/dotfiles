@@ -62,10 +62,6 @@ Plugin 'tpope/vim-sensible'
 " Provides some default settings for vim
 " More info: https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 
-Plugin 'tpope/vim-speeddating'
-" use CTRL-A/CTRL-X to increment dates, times, and more
-" More info: https://github.com/tpope/vim-speeddating
-
 Plugin 'tpope/vim-surround'
 " Allows you to surron words with brackets, quotes, html tags, among others.
 " More info: https://github.com/tpope/vim-surround
