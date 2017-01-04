@@ -8,6 +8,10 @@ if [[ ! "$dir/bin/install" -ef "$0" ]]; then
   exit 1
 fi
 
+#------------------------------------------------------------------------
+#UTILS
+#------------------------------------------------------------------------
+
 fancy_echo() {
   local fmt="$1"; shift
 
@@ -36,9 +40,12 @@ symlink_or_skip(){
   fi
 }
 
-# -------------------------------------
+#------------------------------------------------------------------------
+# DOTFILES
+#------------------------------------------------------------------------
+
 fancy_echo "Dotfiles"
-# -------------------------------------
+
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
@@ -47,9 +54,12 @@ for file in ${files[@]}; do
   symlink_or_skip $file "${HOME}/${file}"
 done
 
-# -------------------------------------
+#------------------------------------------------------------------------
+# SUBLIME TEXT
+#------------------------------------------------------------------------
+
 fancy_echo "Sublime Text Configuration"
-# -------------------------------------
+
 sublime_versions=(2)
 preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
@@ -75,24 +85,27 @@ for sublime_version in ${sublime_versions[@]}; do
   fi
 done
 
-# -------------------------------------
+#------------------------------------------------------------------------
+# VIM
+#------------------------------------------------------------------------
+
 fancy_echo "Vim Monokai color theme"
-# -------------------------------------
 symlink_or_skip .vim/colors/monokai.vim ${HOME}/.vim/colors/monokai.vim
 
-# -------------------------------------
 fancy_echo "Vundle"
-# -------------------------------------
 git submodule init && git submodule update
 symlink_or_skip Vundle.vim ${HOME}/.vim/bundle/Vundle.vim
 
-# -------------------------------------
 fancy_echo "Vim plugins"
-# -------------------------------------
 symlink_or_skip bundles.vim ${HOME}/.vim/bundles.vim
 vim +PluginInstall +qall
-# -------------------------------------
+
+#------------------------------------------------------------------------
+# ZSH
+#------------------------------------------------------------------------
+
 fancy_echo "Oh-My-Zsh plugins"
+
 echo "Installing autojump ..."
 if brew ls -1 | grep -q "autojump"; then 
   echo "Autojump already installed."
