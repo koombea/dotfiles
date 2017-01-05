@@ -19,6 +19,12 @@ fancy_echo() {
   printf "\n=> $fmt\n" "$@"
 }
 
+section_echo(){
+  cyan=$(tput setaf 6)
+  normal=$(tput sgr0)
+  printf "\n%s\n" "${cyan}---------- $1 ----------${normal}"
+}
+
 # Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
 symlink_or_skip(){
   local file=$1
@@ -44,7 +50,7 @@ symlink_or_skip(){
 # DOTFILES
 #------------------------------------------------------------------------
 
-fancy_echo "Dotfiles"
+section_echo "Dotfiles"
 
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
@@ -58,6 +64,7 @@ done
 # SUBLIME TEXT
 #------------------------------------------------------------------------
 
+section_echo "Sublime Text"
 fancy_echo "Sublime Text Configuration"
 
 sublime_versions=(2)
@@ -89,6 +96,7 @@ done
 # VIM
 #------------------------------------------------------------------------
 
+section_echo "Vim"
 fancy_echo "Vim Monokai color theme"
 symlink_or_skip .vim/colors/monokai.vim ${HOME}/.vim/colors/monokai.vim
 
@@ -104,6 +112,7 @@ vim +PluginInstall +qall
 # ZSH
 #------------------------------------------------------------------------
 
+section_echo "ZSH"
 fancy_echo "Oh-My-Zsh plugins"
 
 echo "Installing autojump ..."
