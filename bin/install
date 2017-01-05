@@ -8,11 +8,21 @@ if [[ ! "$dir/bin/install" -ef "$0" ]]; then
   exit 1
 fi
 
+#------------------------------------------------------------------------
+#UTILS
+#------------------------------------------------------------------------
+
 fancy_echo() {
   local fmt="$1"; shift
 
   # shellcheck disable=SC2059
   printf "\n=> $fmt\n" "$@"
+}
+
+section_echo(){
+  cyan=$(tput setaf 6)
+  normal=$(tput sgr0)
+  printf "\n%s\n" "${cyan}---------- $1 ----------${normal}"
 }
 
 # Sysmlink dotfiles to HOME directory and renaming existing file with .old suffix
@@ -36,9 +46,12 @@ symlink_or_skip(){
   fi
 }
 
-# -------------------------------------
-fancy_echo "Dotfiles"
-# -------------------------------------
+#------------------------------------------------------------------------
+# DOTFILES
+#------------------------------------------------------------------------
+
+section_echo "Dotfiles"
+
 # Getting dotfiles list into an array
 files=( $(find . -maxdepth 1 -name '.*' -type f | sed 's#^\./##') )
 
@@ -47,9 +60,13 @@ for file in ${files[@]}; do
   symlink_or_skip $file "${HOME}/${file}"
 done
 
-# -------------------------------------
+#------------------------------------------------------------------------
+# SUBLIME TEXT
+#------------------------------------------------------------------------
+
+section_echo "Sublime Text"
 fancy_echo "Sublime Text Configuration"
-# -------------------------------------
+
 sublime_versions=(2)
 preferences_file="Preferences.sublime-settings"
 for sublime_version in ${sublime_versions[@]}; do
@@ -75,30 +92,28 @@ for sublime_version in ${sublime_versions[@]}; do
   fi
 done
 
-# -------------------------------------
+#------------------------------------------------------------------------
+# VIM
+#------------------------------------------------------------------------
+
+section_echo "Vim"
 fancy_echo "Vim Monokai color theme"
-# -------------------------------------
 symlink_or_skip .vim/colors/monokai.vim ${HOME}/.vim/colors/monokai.vim
 
-# -------------------------------------
 fancy_echo "Vundle"
-# -------------------------------------
 git submodule init && git submodule update
 symlink_or_skip Vundle.vim ${HOME}/.vim/bundle/Vundle.vim
 
-# -------------------------------------
 fancy_echo "Vim plugins"
-# -------------------------------------
 symlink_or_skip bundles.vim ${HOME}/.vim/bundles.vim
 vim +PluginInstall +qall
-# -------------------------------------
+
+#------------------------------------------------------------------------
+# ZSH
+#------------------------------------------------------------------------
+
+section_echo "ZSH"
 fancy_echo "Oh-My-Zsh plugins"
-echo "Installing autojump ..."
-if brew ls -1 | grep -q "autojump"; then 
-  echo "Autojump already installed."
-else
-  brew install autojump
-fi
 
 ZSH=~/.oh-my-zsh
 zsh_plugins_path=$ZSH/custom/plugins
