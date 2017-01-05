@@ -115,13 +115,6 @@ vim +PluginInstall +qall
 section_echo "ZSH"
 fancy_echo "Oh-My-Zsh plugins"
 
-echo "Installing autojump ..."
-if brew ls -1 | grep -q "autojump"; then 
-  echo "Autojump already installed."
-else
-  brew install autojump
-fi
-
 ZSH=~/.oh-my-zsh
 zsh_plugins_path=$ZSH/custom/plugins
 
