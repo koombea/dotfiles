@@ -157,3 +157,11 @@ Plugin 'kylef/apiblueprint.vim'
 Plugin 'bronson/vim-trailing-whitespace'
 " Highlights trailing whitespace in red and provides :FixWhitespace to fix it.
 " https://github.com/bronson/vim-trailing-whitespace
+
+Plugin 'pangloss/vim-javascript'
+"JavaScript bundle for vim, this bundle provides syntax highlighting and improved indentation.
+"https://github.com/pangloss/vim-javascript
+
+Plugin 'maxmellon/vim-jsx-pretty'
+"React JSX syntax pretty highlighting for vim.
+"https://github.com/MaxMEllon/vim-jsx-pretty
