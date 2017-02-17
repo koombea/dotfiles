@@ -165,3 +165,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'maxmellon/vim-jsx-pretty'
 "React JSX syntax pretty highlighting for vim.
 "https://github.com/MaxMEllon/vim-jsx-pretty
+
+Plugin 'mattn/emmet-vim'
+"emmet-vim is a vim plug-in which provides support for expanding abbreviations similar to emmet.
+"https://github.com/mattn/emmet-vim
